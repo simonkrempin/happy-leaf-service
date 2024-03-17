@@ -1,32 +1,25 @@
 package main
 
 import (
-	"embed"
-	"html/template"
-    	"net/http"
+	"github.com/gin-gonic/gin"
 	"os"
 )
 
-//go:embed templates/*
-var templates embed.FS
-var t = template.Must(template.ParseFS(templates, "templates/*"))
-
-//go:embed static/*
-var assets embed.FS
-
-
 func main() {
 	port := "3000"
-	if(os.Getenv("PORT") != "") {
+	if os.Getenv("PORT") != "" {
 		port = os.Getenv("PORT")
 	}
 
-    http.HandleFunc("/", func (w http.ResponseWriter, r *http.Request) {
-        t.Execute(w, "")
-    })
+	router := gin.New()
 
-    fs := http.FileServer(http.FS(assets))
-    http.Handle("/static/", fs)
+	router.Use(protectedRoute)
 
-    http.ListenAndServe(":" + port, nil)
+	router.GET("/auth/login")
+	router.POST("/auth/register")
+
+	router.Run(":" + port)
+}
+
+func protectedRoute(context *gin.Context) {
 }
