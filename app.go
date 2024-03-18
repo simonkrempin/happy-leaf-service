@@ -15,12 +15,12 @@ func main() {
 
 	router := gin.New()
 
-	privateRoutes := router.Group("/", middleware.AuthHandler())
+	privateRoutes := router.Group("/", middleware.AuthHandler)
 	{
-		privateRoutes.GET("/plants")
-		privateRoutes.POST("/analyze-plant")
-		privateRoutes.POST("/add-plant")
-		privateRoutes.DELETE("/logout")
+		privateRoutes.GET("/plants", controller.GetPlants)
+		privateRoutes.POST("/analyse-plant", controller.AnalysePlant)
+		privateRoutes.POST("/add-plant", controller.AddPlant)
+		privateRoutes.DELETE("/logout", controller.Logout)
 		privateRoutes.PUT("/account")
 	}
 

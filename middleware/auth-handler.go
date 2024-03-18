@@ -5,18 +5,16 @@ import (
 	"net/http"
 )
 
-func AuthHandler() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		user, authenticated := checkAuth(c)
-		if !authenticated {
-			c.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
-
-		c.Set("user", user)
-
-		c.Next()
+func AuthHandler(c *gin.Context) {
+	user, authenticated := checkAuth(c)
+	if !authenticated {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
 	}
+
+	c.Set("user", user)
+
+	c.Next()
 }
 
 func checkAuth(c *gin.Context) (interface{}, bool) {
